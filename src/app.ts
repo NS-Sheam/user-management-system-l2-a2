@@ -1,10 +1,12 @@
-const express = require("express");
-import express, { Application } from "express";
-const port = 3000;
+import express, { Application, Request, Response } from 'express';
+
 const app: Application = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'Welcome to User Management API',
+  });
 });
 
 export default app;
