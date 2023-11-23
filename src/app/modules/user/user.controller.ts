@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { userService } from "./user.service";
+import { userServices } from "./user.service";
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body;
-    const result = await userService.createUser(userData);
+    const result = await userServices.createUser(userData);
 
     res.status(200).json({
       success: true,
@@ -22,7 +22,7 @@ const createUser = async (req: Request, res: Response) => {
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const result = await userService.getAllUsers();
+    const result = await userServices.getAllUsers();
     res.status(200).json({
       success: true,
       message: "Users retrieved successfully!",
@@ -40,7 +40,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const result = await userService.getSingleUser(Number(userId));
+    const result = await userServices.getSingleUser(Number(userId));
     res.status(200).json({
       success: true,
       message: "User retrieved successfully!",
@@ -59,7 +59,7 @@ const updateUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const { userData } = req.body;
-    const result = await userService.updateUser(Number(userId), userData);
+    const result = await userServices.updateUser(Number(userId), userData);
     res.status(200).json({
       success: true,
       message: "User updated successfully!",
@@ -77,7 +77,7 @@ const updateUser = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const result = await userService.deleteUser(Number(userId));
+    const result = await userServices.deleteUser(Number(userId));
     res.status(200).json({
       success: true,
       message: "User deleted successfully!",
@@ -92,7 +92,7 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-const UserController = {
+export const userController = {
   createUser,
   getAllUsers,
   getSingleUser,

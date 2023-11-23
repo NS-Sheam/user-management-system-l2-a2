@@ -32,7 +32,7 @@ const deleteUser = async (userId: number): Promise<IUser | null> => {
   return result;
 };
 
-export const userService = {
+export const userServices = {
   createUser,
   getAllUsers,
   getSingleUser,
