@@ -24,26 +24,28 @@ const FullNameValidaionSchema = z.object({
 });
 
 const AddressValidationSchema = z.object({
-  street: z.string().min(1).max(20),
-  city: z.string().min(1).max(20),
-  country: z.string().min(1).max(20),
+  street: z.string(),
+  city: z.string(),
+  country: z.string(),
 });
 
 const OrderValidationSchema = z.object({
-  productName: z.string().min(1).max(20),
-  price: z.number().min(1).max(20),
-  quantity: z.number().min(1).max(20),
+  productName: z.string(),
+  price: z.number(),
+  quantity: z.number(),
 });
 
 const UserValidationSchema = z.object({
-  userId: z.number().min(1).max(20),
+  userId: z.number().min(1),
   username: z.string().min(1).max(20),
-  password: z.string().min(1).max(20),
+  password: z.string(),
   fullName: FullNameValidaionSchema,
-  age: z.number().min(1).max(20),
-  email: z.string().min(1).max(20),
+  age: z.number(),
+  email: z.string().email(),
   isActive: z.boolean(),
-  hobbies: z.array(z.string().min(1).max(20)),
+  hobbies: z.array(z.string()),
   address: AddressValidationSchema,
   orders: z.array(OrderValidationSchema),
 });
+
+export default UserValidationSchema;

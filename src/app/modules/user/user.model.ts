@@ -1,5 +1,11 @@
 import { Schema, model } from "mongoose";
-import { IAddress, IFullName, IOrder, IUser } from "./user.interface";
+import {
+  IAddress,
+  IFullName,
+  IOrder,
+  IUser,
+  UserModel,
+} from "./user.interface";
 
 const fullNameSchema = new Schema<IFullName>({
   firstName: {
@@ -49,7 +55,7 @@ const orderSchema = new Schema<IOrder>({
   },
 });
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<IUser, UserModel>({
   userId: {
     type: Number,
     unique: true,
@@ -93,4 +99,16 @@ const userSchema = new Schema<IUser>({
   },
 });
 
-export const User = model<IUser>("User", userSchema);
+// user exist or not
+
+userSchema.statics.isUserExist = async function (idOrEmail: number | string) {
+  let result;
+  if (typeof idOrEmail === "string") {
+    result = await this.findOne({ email: idOrEmail });
+  } else if (typeof idOrEmail === "number") {
+    result = await this.findOne({ userId: idOrEmail });
+  }
+  return result ? true : false;
+};
+
+export const User = model<IUser, UserModel>("User", userSchema);

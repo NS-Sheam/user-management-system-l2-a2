@@ -2,6 +2,12 @@ import { IUser } from "./user.interface";
 import { User } from "./user.model";
 
 const createUser = async (userData: IUser): Promise<IUser> => {
+  if (
+    (await User.isUserExist(userData.userId)) ||
+    (await User.isUserExist(userData.email))
+  ) {
+    throw new Error("User already exist!");
+  }
   const result = await User.create(userData);
   console.log(result);
   return result;
