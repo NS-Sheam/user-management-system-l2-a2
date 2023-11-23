@@ -32,6 +32,11 @@ const updateUser = async (
   userId: number,
   user: IUser,
 ): Promise<IUser | null> => {
+  if (!(await User.isUserExist(userId))) {
+    const error = new Error("User not found!");
+    error.name = "UserNotFoundError";
+    throw error;
+  }
   const updateStatus = await User.updateOne({ userId }, user, {
     new: true,
     runValidators: true,
@@ -44,13 +49,14 @@ const updateUser = async (
   return result;
 };
 
-const deleteUser = async (userId: number): Promise<IUser | null> => {
-  const userToDelete = await User.findOne({ userId });
-  const deleteStatus = await User.deleteOne({ userId });
-  if (deleteStatus.deletedCount === 0) {
-    return null;
+const deleteUser = async (userId: number): Promise<null> => {
+  if (!(await User.isUserExist(userId))) {
+    const error = new Error("User not found!");
+    error.name = "UserNotFoundError";
+    throw error;
   }
-  return userToDelete;
+  await User.deleteOne({ userId });
+  return null;
 };
 
 export const userServices = {

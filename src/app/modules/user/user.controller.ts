@@ -81,11 +81,22 @@ const updateUser = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "User updation failed!",
-      error,
-    });
+    if (error.name === "UserNotFoundError") {
+      res.status(404).json({
+        success: false,
+        message: error.message || "User not found!",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: error.message || "User updation failed!",
+        error,
+      });
+    }
   }
 };
 
@@ -99,11 +110,22 @@ const deleteUser = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "User deletion failed!",
-      error,
-    });
+    if (error.name === "UserNotFoundError") {
+      res.status(404).json({
+        success: false,
+        message: error.message || "User not found!",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: error.message || "User deletion failed!",
+        error,
+      });
+    }
   }
 };
 

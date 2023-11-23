@@ -96,7 +96,6 @@ const userSchema = new Schema<IUser, UserModel>({
   address: addressSchema,
   orders: {
     type: [orderSchema],
-    required: false,
   },
 });
 
@@ -116,19 +115,19 @@ userSchema.statics.isUserExist = async function (idOrEmail: number | string) {
 
 // hide password from response when user is created and order
 userSchema.post("save", function (doc, next) {
-  console.log(doc);
   doc.orders?.length === 0 && (doc.orders = undefined);
   doc.set("password", undefined);
   next();
 });
+
+// showing only the required field
 userSchema.pre("find", function (this: Query<IUser, Document>, next) {
   this.find().projection({
     username: 1,
-    fullname: 1,
-    email: 1,
+    fullName: 1,
     age: 1,
+    email: 1,
     address: 1,
-    orders: { $elemMatch: { $exists: true } },
   });
   next();
 });
