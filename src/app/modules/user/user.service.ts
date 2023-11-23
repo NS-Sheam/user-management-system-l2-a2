@@ -19,6 +19,11 @@ const getAllUsers = async (): Promise<IUser[]> => {
 };
 
 const getSingleUser = async (userId: number): Promise<IUser | null> => {
+  if (!(await User.isUserExist(userId))) {
+    const error = new Error("User not found!");
+    error.name = "UserNotFoundError";
+    throw error;
+  }
   const result = await User.findOne({ userId });
   return result;
 };

@@ -36,7 +36,7 @@ const getAllUsers = async (req: Request, res: Response) => {
     res.status(400).json({
       success: false,
       message: error.message || "User retrieval failed!",
-      error,
+      error: error || "something went wrong",
     });
   }
 };
@@ -51,11 +51,22 @@ const getSingleUser = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "User retrieval failed!",
-      error,
-    });
+    if (error.name === "UserNotFoundError") {
+      res.status(404).json({
+        success: false,
+        message: error.message || "User not found!",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: error.message || "User retrieval failed!",
+        error,
+      });
+    }
   }
 };
 

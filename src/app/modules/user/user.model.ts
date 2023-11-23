@@ -112,13 +112,21 @@ userSchema.statics.isUserExist = async function (idOrEmail: number | string) {
 };
 
 // middlerware
-userSchema.pre(/^find/, function (this: Query<IUser, Document>, next) {
+userSchema.pre("find", function (this: Query<IUser, Document>, next) {
   this.find().projection({
     username: 1,
     fullname: 1,
     email: 1,
     age: 1,
     address: 1,
+  });
+  next();
+});
+
+userSchema.pre("findOne", function (this: Query<IUser, Document>, next) {
+  this.findOne().projection({
+    orders: 0,
+    password: 0,
   });
   next();
 });
