@@ -66,31 +66,30 @@ const userSchema = new Schema<IUser>({
     trim: true,
     required: [true, "Password is required"],
     minlength: [6, "Password must be at least 6 characters"],
-    maxlength: [12, "Password can't be more than 12 characters"],
     fullName: fullNameSchema,
-    age: {
-      type: Number,
-      trim: true,
-      required: [true, "Age is required"],
-    },
-    email: {
-      type: String,
-      trim: true,
-      unique: true,
-      required: [true, "Email is required"],
-    },
-    isActive: {
-      type: Boolean,
-      default: false,
-    },
-    hobbies: {
-      type: [String],
-      default: [],
-    },
-    address: addressSchema,
-    orders: {
-      type: [orderSchema],
-    },
+  },
+  age: {
+    type: Number,
+    trim: true,
+    required: [true, "Age is required"],
+  },
+  email: {
+    type: String,
+    trim: true,
+    unique: true,
+    required: [true, "Email is required"],
+  },
+  isActive: {
+    type: Boolean,
+    default: false,
+  },
+  hobbies: {
+    type: [String],
+    default: [],
+  },
+  address: addressSchema,
+  orders: {
+    type: [orderSchema],
   },
 });
 

@@ -58,7 +58,7 @@ const getSingleUser = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const { userData } = req.body;
+    const { user: userData } = req.body;
     const result = await userServices.updateUser(Number(userId), userData);
     res.status(200).json({
       success: true,
