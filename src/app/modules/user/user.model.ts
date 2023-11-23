@@ -7,6 +7,9 @@ import {
   UserModel,
 } from "./user.interface";
 
+import bcrypt from "bcrypt";
+import config from "../../config";
+
 const fullNameSchema = new Schema<IFullName>({
   firstName: {
     type: String,
@@ -112,6 +115,16 @@ userSchema.statics.isUserExist = async function (idOrEmail: number | string) {
 };
 
 // middlerware
+
+// encrypt password by bcrypt
+userSchema.pre("save", async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
 
 // hide password from response when user is created and order
 userSchema.post("save", function (doc, next) {
