@@ -12,7 +12,7 @@ const getAllUsers = async (): Promise<IUser[]> => {
 };
 
 const getSingleUser = async (userId: number): Promise<IUser | null> => {
-  const result = await User.findOne({ userId });
+  const result = await User.findById(userId);
   return result;
 };
 
@@ -32,7 +32,7 @@ const deleteUser = async (userId: number): Promise<IUser | null> => {
   return result;
 };
 
-const userService = {
+export const userService = {
   createUser,
   getAllUsers,
   getSingleUser,
