@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { IAddress, IFullName, IOrder, IUser } from "./user/user.interface";
+import { IAddress, IFullName, IOrder, IUser } from "./user.interface";
 
 const fullNameSchema = new Schema<IFullName>({
   firstName: {
@@ -88,7 +88,9 @@ const userSchema = new Schema<IUser>({
       default: [],
     },
     address: addressSchema,
-    order: orderSchema,
+    orders: {
+      type: [orderSchema],
+    },
   },
 });
 
