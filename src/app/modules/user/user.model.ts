@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Query, Schema, model } from "mongoose";
 import {
   IAddress,
   IFullName,
@@ -67,12 +67,12 @@ const userSchema = new Schema<IUser, UserModel>({
     trim: true,
     required: [true, "Username is required"],
   },
+  fullName: fullNameSchema,
   password: {
     type: String,
     trim: true,
     required: [true, "Password is required"],
     minlength: [6, "Password must be at least 6 characters"],
-    fullName: fullNameSchema,
   },
   age: {
     type: Number,
@@ -110,5 +110,17 @@ userSchema.statics.isUserExist = async function (idOrEmail: number | string) {
   }
   return result ? true : false;
 };
+
+// middlerware
+userSchema.pre(/^find/, function (this: Query<IUser, Document>, next) {
+  this.find().projection({
+    username: 1,
+    fullname: 1,
+    email: 1,
+    age: 1,
+    address: 1,
+  });
+  next();
+});
 
 export const User = model<IUser, UserModel>("User", userSchema);
