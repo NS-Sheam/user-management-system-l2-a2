@@ -41,5 +41,4 @@ NODE_ENV=development
 PORT=5000
 DATABASE_URL=mongodb+srv://<username>:<password>@cluster0.k0vsmln.mongodb.net/<databasename>?retryWrites=true&w=majority
 BCRYPT_SALT_ROUNDS=10
-
 ```

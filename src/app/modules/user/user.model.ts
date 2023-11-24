@@ -41,22 +41,27 @@ const addressSchema = new Schema<IAddress>({
   },
 });
 
-const orderSchema = new Schema<IOrder>({
-  productName: {
-    type: String,
-    required: [true, "Product name is required"],
+const orderSchema = new Schema<IOrder>(
+  {
+    productName: {
+      type: String,
+      required: [true, "Product name is required"],
+    },
+    price: {
+      type: Number,
+      trim: true,
+      required: [true, "Price is required"],
+    },
+    quantity: {
+      type: Number,
+      trim: true,
+      required: [true, "Quantity is required"],
+    },
   },
-  price: {
-    type: Number,
-    trim: true,
-    required: [true, "Price is required"],
+  {
+    _id: false,
   },
-  quantity: {
-    type: Number,
-    trim: true,
-    required: [true, "Quantity is required"],
-  },
-});
+);
 
 const userSchema = new Schema<IUser, UserModel>({
   userId: {
@@ -70,7 +75,10 @@ const userSchema = new Schema<IUser, UserModel>({
     trim: true,
     required: [true, "Username is required"],
   },
-  fullName: fullNameSchema,
+  fullName: {
+    type: fullNameSchema,
+    _id: false,
+  },
   password: {
     type: String,
     trim: true,
@@ -96,13 +104,16 @@ const userSchema = new Schema<IUser, UserModel>({
     type: [String],
     default: [],
   },
-  address: addressSchema,
+  address: {
+    type: addressSchema,
+    _id: false,
+  },
   orders: {
     type: [orderSchema],
   },
 });
 
-// user exist or not
+// methods---------------------------------------------
 // static method for user exist or not
 userSchema.statics.isUserExist = async function (idOrEmail: number | string) {
   let result;
@@ -114,8 +125,7 @@ userSchema.statics.isUserExist = async function (idOrEmail: number | string) {
   return result ? true : false; //if user exist return true else false
 };
 
-// middlerware
-
+// middlerwares---------------------------------------------
 // encrypt password by bcrypt
 userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(
@@ -131,6 +141,8 @@ userSchema.post("save", function (doc, next) {
     doc.orders = undefined;
   }
   doc.set("password", undefined);
+  doc.set("_id", undefined);
+  doc.set("__v", undefined);
   next();
 });
 

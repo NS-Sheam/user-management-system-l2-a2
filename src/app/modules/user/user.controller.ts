@@ -204,7 +204,7 @@ const getTotalOrderPrices = async (req: Request, res: Response) => {
     const result = await userServices.getTotalOrderPrices(Number(userId));
     res.status(200).json({
       success: true,
-      message: "Total price calculated successfully!!",
+      message: "Total price calculated successfully!",
       data: { totalPrice: Number(result.toFixed(2)) },
     });
   } catch (error) {

@@ -31,5 +31,6 @@ export interface IUser {
 }
 
 export interface UserModel extends Model<IUser> {
+  // eslint-disable-next-line no-unused-vars
   isUserExist: (idOrEmail: number | string) => Promise<boolean>;
 }

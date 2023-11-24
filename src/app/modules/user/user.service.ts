@@ -17,7 +17,7 @@ const createUser = async (userData: IUser): Promise<IUser> => {
 const getAllUsers = async (): Promise<IUser[]> => {
   const result = await User.find(
     {},
-    { username: 1, fullName: 1, age: 1, email: 1, address: 1 }, // projection
+    { username: 1, fullName: 1, age: 1, email: 1, address: 1, _id: 0 }, // projection
   );
   return result;
 };
@@ -28,7 +28,10 @@ const getSingleUser = async (userId: number): Promise<IUser | null> => {
     error.name = "UserNotFoundError";
     throw error;
   }
-  const result = await User.findOne({ userId }, { orders: 0, password: 0 });
+  const result = await User.findOne(
+    { userId },
+    { orders: 0, password: 0, _id: 0, __v: 0 },
+  );
   return result;
 };
 
@@ -42,6 +45,7 @@ const updateUser = async (
     error.name = "UserNotFoundError";
     throw error;
   }
+
   const updateStatus = await User.updateOne({ userId }, user, {
     new: true,
     runValidators: true,
@@ -49,7 +53,10 @@ const updateUser = async (
   if (updateStatus.modifiedCount === 0) {
     throw new Error("User not updated!");
   }
-  const result = await User.findOne({ userId });
+  const result = await User.findOne(
+    { userId },
+    { orders: 0, password: 0, _id: 0, __v: 0 },
+  );
   return result;
 };
 
