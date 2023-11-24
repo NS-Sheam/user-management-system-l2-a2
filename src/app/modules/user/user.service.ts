@@ -90,6 +90,21 @@ const getOrders = async (userId: number): Promise<IOrder[] | null> => {
   return result?.orders || null;
 };
 
+// total order prices
+const getTotalOrderPrices = async (userId: number): Promise<number> => {
+  if (!(await User.isUserExist(userId))) {
+    const error = new Error("User not found!");
+    error.name = "UserNotFoundError";
+    throw error;
+  }
+  const result = await User.aggregate([
+    { $match: { userId } },
+    { $unwind: "$orders" },
+    { $group: { _id: "$userId", totalPrice: { $sum: "$orders.price" } } },
+  ]);
+  return result[0]?.totalPrice || 0;
+};
+
 export const userServices = {
   createUser,
   getAllUsers,
@@ -98,4 +113,5 @@ export const userServices = {
   deleteUser,
   createOrder,
   getOrders,
+  getTotalOrderPrices,
 };

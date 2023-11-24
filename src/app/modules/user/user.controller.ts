@@ -16,10 +16,10 @@ const createUser = async (req: Request, res: Response) => {
       message: "User created successfully!",
       data: result,
     });
-  } catch (error: any) {
+  } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message || "User creation failed!",
+      message: (error as Error).message || "User creation failed!",
       error: error || "something went wrong",
     });
   }
@@ -34,10 +34,10 @@ const getAllUsers = async (req: Request, res: Response) => {
       message: "Users retrieved successfully!",
       data: result,
     });
-  } catch (error: any) {
+  } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message || "User retrieval failed!",
+      message: (error as Error).message || "User retrieval failed!",
       error: error || "something went wrong",
     });
   }
@@ -53,11 +53,11 @@ const getSingleUser = async (req: Request, res: Response) => {
       message: "User retrieved successfully!",
       data: result,
     });
-  } catch (error: any) {
-    if (error.name === "UserNotFoundError") {
+  } catch (error) {
+    if ((error as Error).name === "UserNotFoundError") {
       res.status(404).json({
         success: false,
-        message: error.message || "User not found!",
+        message: (error as Error).message || "User not found!",
         error: {
           code: 404,
           description: "User not found!",
@@ -66,7 +66,7 @@ const getSingleUser = async (req: Request, res: Response) => {
     } else {
       res.status(400).json({
         success: false,
-        message: error.message || "User retrieval failed!",
+        message: (error as Error).message || "User retrieval failed!",
         error,
       });
     }
@@ -84,11 +84,11 @@ const updateUser = async (req: Request, res: Response) => {
       message: "User updated successfully!",
       data: result,
     });
-  } catch (error: any) {
-    if (error.name === "UserNotFoundError") {
+  } catch (error) {
+    if ((error as Error).name === "UserNotFoundError") {
       res.status(404).json({
         success: false,
-        message: error.message || "User not found!",
+        message: (error as Error).message || "User not found!",
         error: {
           code: 404,
           description: "User not found!",
@@ -97,7 +97,7 @@ const updateUser = async (req: Request, res: Response) => {
     } else {
       res.status(400).json({
         success: false,
-        message: error.message || "User updation failed!",
+        message: (error as Error).message || "User updation failed!",
         error,
       });
     }
@@ -114,11 +114,11 @@ const deleteUser = async (req: Request, res: Response) => {
       message: "User deleted successfully!",
       data: result,
     });
-  } catch (error: any) {
-    if (error.name === "UserNotFoundError") {
+  } catch (error) {
+    if ((error as Error).name === "UserNotFoundError") {
       res.status(404).json({
         success: false,
-        message: error.message || "User not found!",
+        message: (error as Error).message || "User not found!",
         error: {
           code: 404,
           description: "User not found!",
@@ -127,7 +127,7 @@ const deleteUser = async (req: Request, res: Response) => {
     } else {
       res.status(400).json({
         success: false,
-        message: error.message || "User deletion failed!",
+        message: (error as Error).message || "User deletion failed!",
         error,
       });
     }
@@ -145,11 +145,11 @@ const createOrder = async (req: Request, res: Response) => {
       message: "Order creation successfully!",
       data: result,
     });
-  } catch (error: any) {
-    if (error.name === "UserNotFoundError") {
+  } catch (error) {
+    if ((error as Error).name === "UserNotFoundError") {
       res.status(404).json({
         success: false,
-        message: error.message || "User not found!",
+        message: (error as Error).message || "User not found!",
         error: {
           code: 404,
           description: "User not found!",
@@ -158,7 +158,7 @@ const createOrder = async (req: Request, res: Response) => {
     } else {
       res.status(400).json({
         success: false,
-        message: error.message || "order creation failed!",
+        message: (error as Error).message || "order creation failed!",
         error,
       });
     }
@@ -175,11 +175,11 @@ const getOrders = async (req: Request, res: Response) => {
       message: "Orders retrieved successfully!",
       data: { orders: result },
     });
-  } catch (error: any) {
-    if (error.name === "UserNotFoundError") {
+  } catch (error) {
+    if ((error as Error).name === "UserNotFoundError") {
       res.status(404).json({
         success: false,
-        message: error.message || "User not found!",
+        message: (error as Error).message || "User not found!",
         error: {
           code: 404,
           description: "User not found!",
@@ -188,7 +188,37 @@ const getOrders = async (req: Request, res: Response) => {
     } else {
       res.status(400).json({
         success: false,
-        message: error.message || "order retrieved failed!",
+        message: (error as Error).message || "order retrieved failed!",
+        error,
+      });
+    }
+  }
+};
+
+// get total price of a orders
+const getTotalOrderPrices = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await userServices.getTotalOrderPrices(Number(userId));
+    res.status(200).json({
+      success: true,
+      message: "Total price calculated successfully!!",
+      data: { totalPrice: Number(result.toFixed(2)) },
+    });
+  } catch (error) {
+    if ((error as Error).name === "UserNotFoundError") {
+      res.status(404).json({
+        success: false,
+        message: (error as Error).message || "User not found!",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: (error as Error).message || "order retrieved failed!",
         error,
       });
     }
@@ -203,4 +233,5 @@ export const userController = {
   deleteUser,
   createOrder,
   getOrders,
+  getTotalOrderPrices,
 };
