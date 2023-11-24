@@ -17,7 +17,7 @@ const createUser = async (userData: IUser): Promise<IUser> => {
 const getAllUsers = async (): Promise<IUser[]> => {
   const result = await User.find(
     {},
-    { username: 1, fullName: 1, age: 1, email: 1, address: 1 },
+    { username: 1, fullName: 1, age: 1, email: 1, address: 1 }, // projection
   );
   return result;
 };
