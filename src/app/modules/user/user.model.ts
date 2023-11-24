@@ -1,4 +1,4 @@
-import { Query, Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import {
   IAddress,
   IFullName,
@@ -107,11 +107,11 @@ const userSchema = new Schema<IUser, UserModel>({
 userSchema.statics.isUserExist = async function (idOrEmail: number | string) {
   let result;
   if (typeof idOrEmail === "string") {
-    result = await this.findOne({ email: idOrEmail });
+    result = await this.findOne({ email: idOrEmail }); // find user by email
   } else if (typeof idOrEmail === "number") {
-    result = await this.findOne({ userId: idOrEmail });
+    result = await this.findOne({ userId: idOrEmail }); // find user by userId
   }
-  return result ? true : false;
+  return result ? true : false; //if user exist return true else false
 };
 
 // middlerware
@@ -121,7 +121,7 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(
     this.password,
     Number(config.bcrypt_salt_rounds),
-  );
+  ); // encrypt password
   next();
 });
 

@@ -7,7 +7,7 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body;
 
-    const validatedUserData = UserValidationSchema.parse(userData);
+    const validatedUserData = UserValidationSchema.parse(userData); // validate user data
 
     const result = await userServices.createUser(validatedUserData);
 
@@ -55,6 +55,7 @@ const getSingleUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if ((error as Error).name === "UserNotFoundError") {
+      // if user not found
       res.status(404).json({
         success: false,
         message: (error as Error).message || "User not found!",
@@ -86,6 +87,7 @@ const updateUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if ((error as Error).name === "UserNotFoundError") {
+      // if user not found
       res.status(404).json({
         success: false,
         message: (error as Error).message || "User not found!",

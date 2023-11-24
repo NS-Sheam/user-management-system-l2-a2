@@ -10,7 +10,6 @@ const createUser = async (userData: IUser): Promise<IUser> => {
     throw new Error("User already exist!");
   }
   const result = await User.create(userData);
-  console.log(result);
   return result;
 };
 
@@ -90,7 +89,7 @@ const getOrders = async (userId: number): Promise<IOrder[] | null> => {
   return result?.orders || null;
 };
 
-// total order prices
+// total order prices calculation
 const getTotalOrderPrices = async (userId: number): Promise<number> => {
   if (!(await User.isUserExist(userId))) {
     const error = new Error("User not found!");
