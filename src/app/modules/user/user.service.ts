@@ -100,7 +100,15 @@ const getTotalOrderPrices = async (userId: number): Promise<number> => {
   const result = await User.aggregate([
     { $match: { userId } },
     { $unwind: "$orders" },
-    { $group: { _id: "$userId", totalPrice: { $sum: "$orders.price" } } },
+    {
+      $group: {
+        _id: "$userId",
+        totalPrice: {
+          $sum: { $multiply: ["$orders.price", "$orders.quantity"] },
+        },
+      },
+    },
+    { $project: { totalPrice: 1 } },
   ]);
   return result[0]?.totalPrice || 0;
 };
