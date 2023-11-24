@@ -118,9 +118,8 @@ userSchema.statics.isUserExist = async function (idOrEmail: number | string) {
 
 // encrypt password by bcrypt
 userSchema.pre("save", async function (next) {
-  const user = this;
-  user.password = await bcrypt.hash(
-    user.password,
+  this.password = await bcrypt.hash(
+    this.password,
     Number(config.bcrypt_salt_rounds),
   );
   next();
@@ -128,28 +127,10 @@ userSchema.pre("save", async function (next) {
 
 // hide password from response when user is created and order
 userSchema.post("save", function (doc, next) {
-  doc.orders?.length === 0 && (doc.orders = undefined);
+  if (doc.orders && doc.orders.length === 0) {
+    doc.orders = undefined;
+  }
   doc.set("password", undefined);
-  next();
-});
-
-// showing only the required field
-userSchema.pre("find", function (this: Query<IUser, Document>, next) {
-  this.find().projection({
-    username: 1,
-    fullName: 1,
-    age: 1,
-    email: 1,
-    address: 1,
-  });
-  next();
-});
-
-userSchema.pre("findOne", function (this: Query<IUser, Document>, next) {
-  this.findOne().projection({
-    orders: 0,
-    password: 0,
-  });
   next();
 });
 

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { userServices } from "./user.service";
 import UserValidationSchema from "./user.validation";
 
+// create user
 const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body;
@@ -24,6 +25,7 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
+// get all user
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await userServices.getAllUsers();
@@ -41,6 +43,7 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+// get single user
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -70,6 +73,7 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+// update user
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -100,6 +104,7 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
+// delete user
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -129,10 +134,73 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
+// create order
+const createOrder = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { order } = req.body;
+    const result = await userServices.createOrder(Number(userId), order);
+    res.status(200).json({
+      success: true,
+      message: "Order creation successfully!",
+      data: result,
+    });
+  } catch (error: any) {
+    if (error.name === "UserNotFoundError") {
+      res.status(404).json({
+        success: false,
+        message: error.message || "User not found!",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: error.message || "order creation failed!",
+        error,
+      });
+    }
+  }
+};
+
+// get orders
+const getOrders = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await userServices.getOrders(Number(userId));
+    res.status(200).json({
+      success: true,
+      message: "Orders retrieved successfully!",
+      data: { orders: result },
+    });
+  } catch (error: any) {
+    if (error.name === "UserNotFoundError") {
+      res.status(404).json({
+        success: false,
+        message: error.message || "User not found!",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: error.message || "order retrieved failed!",
+        error,
+      });
+    }
+  }
+};
+
 export const userController = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateUser,
   deleteUser,
+  createOrder,
+  getOrders,
 };

@@ -1,6 +1,7 @@
-import { IUser } from "./user.interface";
+import { IOrder, IUser } from "./user.interface";
 import { User } from "./user.model";
 
+// create user
 const createUser = async (userData: IUser): Promise<IUser> => {
   if (
     (await User.isUserExist(userData.userId)) ||
@@ -13,8 +14,12 @@ const createUser = async (userData: IUser): Promise<IUser> => {
   return result;
 };
 
+// get all users
 const getAllUsers = async (): Promise<IUser[]> => {
-  const result = await User.find();
+  const result = await User.find(
+    {},
+    { username: 1, fullName: 1, age: 1, email: 1, address: 1 },
+  );
   return result;
 };
 
@@ -24,10 +29,11 @@ const getSingleUser = async (userId: number): Promise<IUser | null> => {
     error.name = "UserNotFoundError";
     throw error;
   }
-  const result = await User.findOne({ userId });
+  const result = await User.findOne({ userId }, { orders: 0, password: 0 });
   return result;
 };
 
+// update user
 const updateUser = async (
   userId: number,
   user: IUser,
@@ -42,13 +48,13 @@ const updateUser = async (
     runValidators: true,
   });
   if (updateStatus.modifiedCount === 0) {
-    return null;
+    throw new Error("User not updated!");
   }
   const result = await User.findOne({ userId });
-  console.log(result);
   return result;
 };
 
+// delete user
 const deleteUser = async (userId: number): Promise<null> => {
   if (!(await User.isUserExist(userId))) {
     const error = new Error("User not found!");
@@ -59,10 +65,37 @@ const deleteUser = async (userId: number): Promise<null> => {
   return null;
 };
 
+// create order
+const createOrder = async (userId: number, order: IOrder): Promise<null> => {
+  if (!(await User.isUserExist(userId))) {
+    const error = new Error("User not found!");
+    error.name = "UserNotFoundError";
+    throw error;
+  }
+  const result = await User.updateOne({ userId }, { $push: { orders: order } });
+  if (result.modifiedCount === 0) {
+    throw new Error("Order creation failed!");
+  }
+  return null;
+};
+
+// get orders
+const getOrders = async (userId: number): Promise<IOrder[] | null> => {
+  if (!(await User.isUserExist(userId))) {
+    const error = new Error("User not found!");
+    error.name = "UserNotFoundError";
+    throw error;
+  }
+  const result = await User.findOne({ userId }, { orders: 1 });
+  return result?.orders || null;
+};
+
 export const userServices = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateUser,
   deleteUser,
+  createOrder,
+  getOrders,
 };
