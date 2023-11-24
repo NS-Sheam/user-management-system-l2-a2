@@ -12,11 +12,11 @@
 - I create a static method to find the user exist or not and then use the methot to the service
 - I removed the password field from the create response and find also
 
-## Running the project
+## Running the project localy and for production
 
 ```bash
-npm run start:dev //development
-npm run start:prod //production
+npm run start:dev #for development
+npm run start:prod #for production
 ```
 
 ## Scripts
