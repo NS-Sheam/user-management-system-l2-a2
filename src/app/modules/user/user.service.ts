@@ -24,7 +24,7 @@ const getAllUsers = async (): Promise<IUser[]> => {
 
 const getSingleUser = async (userId: number): Promise<IUser | null> => {
   if (!(await User.isUserExist(userId))) {
-    const error = new Error("User not found!");
+    const error = new Error("User not found");
     error.name = "UserNotFoundError";
     throw error;
   }
@@ -41,7 +41,7 @@ const updateUser = async (
   user: IUser,
 ): Promise<IUser | null> => {
   if (!(await User.isUserExist(userId))) {
-    const error = new Error("User not found!");
+    const error = new Error("User not found");
     error.name = "UserNotFoundError";
     throw error;
   }
@@ -63,7 +63,7 @@ const updateUser = async (
 // delete user
 const deleteUser = async (userId: number): Promise<null> => {
   if (!(await User.isUserExist(userId))) {
-    const error = new Error("User not found!");
+    const error = new Error("User not found");
     error.name = "UserNotFoundError";
     throw error;
   }
@@ -74,7 +74,7 @@ const deleteUser = async (userId: number): Promise<null> => {
 // create order
 const createOrder = async (userId: number, order: IOrder): Promise<null> => {
   if (!(await User.isUserExist(userId))) {
-    const error = new Error("User not found!");
+    const error = new Error("User not found");
     error.name = "UserNotFoundError";
     throw error;
   }
@@ -88,7 +88,7 @@ const createOrder = async (userId: number, order: IOrder): Promise<null> => {
 // get orders
 const getOrders = async (userId: number): Promise<IOrder[] | null> => {
   if (!(await User.isUserExist(userId))) {
-    const error = new Error("User not found!");
+    const error = new Error("User not found");
     error.name = "UserNotFoundError";
     throw error;
   }
@@ -99,7 +99,7 @@ const getOrders = async (userId: number): Promise<IOrder[] | null> => {
 // total order prices calculation
 const getTotalOrderPrices = async (userId: number): Promise<number> => {
   if (!(await User.isUserExist(userId))) {
-    const error = new Error("User not found!");
+    const error = new Error("User not found");
     error.name = "UserNotFoundError";
     throw error;
   }

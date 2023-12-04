@@ -5,7 +5,7 @@ import UserValidationSchema from "./user.validation";
 // create user
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user: userData } = req.body;
+    const userData = req.body;
 
     const validatedUserData = UserValidationSchema.parse(userData); // validate user data
 
@@ -31,7 +31,7 @@ const getAllUsers = async (req: Request, res: Response) => {
     const result = await userServices.getAllUsers();
     res.status(200).json({
       success: true,
-      message: "Users retrieved successfully!",
+      message: "Users fetched successfully!",
       data: result,
     });
   } catch (error) {
@@ -50,7 +50,7 @@ const getSingleUser = async (req: Request, res: Response) => {
     const result = await userServices.getSingleUser(Number(userId));
     res.status(200).json({
       success: true,
-      message: "User retrieved successfully!",
+      message: "User fetched successfully!",
       data: result,
     });
   } catch (error) {
@@ -58,10 +58,10 @@ const getSingleUser = async (req: Request, res: Response) => {
       // if user not found
       res.status(404).json({
         success: false,
-        message: (error as Error).message || "User not found!",
+        message: (error as Error).message || "User not found",
         error: {
           code: 404,
-          description: "User not found!",
+          description: "User not found",
         },
       });
     } else {
@@ -78,7 +78,7 @@ const getSingleUser = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const { user: userData } = req.body;
+    const userData = req.body;
     const result = await userServices.updateUser(Number(userId), userData);
     res.status(200).json({
       success: true,
@@ -90,10 +90,10 @@ const updateUser = async (req: Request, res: Response) => {
       // if user not found
       res.status(404).json({
         success: false,
-        message: (error as Error).message || "User not found!",
+        message: (error as Error).message || "User not found",
         error: {
           code: 404,
-          description: "User not found!",
+          description: "User not found",
         },
       });
     } else {
@@ -120,10 +120,10 @@ const deleteUser = async (req: Request, res: Response) => {
     if ((error as Error).name === "UserNotFoundError") {
       res.status(404).json({
         success: false,
-        message: (error as Error).message || "User not found!",
+        message: (error as Error).message || "User not found",
         error: {
           code: 404,
-          description: "User not found!",
+          description: "User not found",
         },
       });
     } else {
@@ -140,21 +140,21 @@ const deleteUser = async (req: Request, res: Response) => {
 const createOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const { order } = req.body;
+    const order = req.body;
     const result = await userServices.createOrder(Number(userId), order);
     res.status(200).json({
       success: true,
-      message: "Order creation successfully!",
+      message: "Order created successfully!",
       data: result,
     });
   } catch (error) {
     if ((error as Error).name === "UserNotFoundError") {
       res.status(404).json({
         success: false,
-        message: (error as Error).message || "User not found!",
+        message: (error as Error).message || "User not found",
         error: {
           code: 404,
-          description: "User not found!",
+          description: "User not found",
         },
       });
     } else {
@@ -174,23 +174,23 @@ const getOrders = async (req: Request, res: Response) => {
     const result = await userServices.getOrders(Number(userId));
     res.status(200).json({
       success: true,
-      message: "Orders retrieved successfully!",
+      message: "Orders fetched successfully!",
       data: { orders: result },
     });
   } catch (error) {
     if ((error as Error).name === "UserNotFoundError") {
       res.status(404).json({
         success: false,
-        message: (error as Error).message || "User not found!",
+        message: (error as Error).message || "User not found",
         error: {
           code: 404,
-          description: "User not found!",
+          description: "User not found",
         },
       });
     } else {
       res.status(400).json({
         success: false,
-        message: (error as Error).message || "order retrieved failed!",
+        message: (error as Error).message || "order fetched failed!",
         error,
       });
     }
@@ -211,16 +211,16 @@ const getTotalOrderPrices = async (req: Request, res: Response) => {
     if ((error as Error).name === "UserNotFoundError") {
       res.status(404).json({
         success: false,
-        message: (error as Error).message || "User not found!",
+        message: (error as Error).message || "User not found",
         error: {
           code: 404,
-          description: "User not found!",
+          description: "User not found",
         },
       });
     } else {
       res.status(400).json({
         success: false,
-        message: (error as Error).message || "order retrieved failed!",
+        message: (error as Error).message || "order fetched failed!",
         error,
       });
     }
